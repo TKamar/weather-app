@@ -1,1 +1,4 @@
-<p>favorites works!</p>
+<div *ngFor="let favorite of favorites" (click)="viewFavorite(favorite.id)">
+  <p>{{ favorite.name }}</p>
+  <p>{{ favorite.currentWeather }}</p>
+</div>
