@@ -1,1 +1,7 @@
-<p>weather works!</p>
+<div>
+  <input type="text" [(ngMode)]="searchCity" placeholder="Search City" />
+  <button (click)="searchWeather()">Search</button>
+</div>
+<div *ngIf="weatherData">
+  <button (click)="toggleFavorite()">Toggle Favorite</button>
+</div>
