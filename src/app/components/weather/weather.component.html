@@ -1,7 +1,25 @@
-<div>
-  <input type="text" [(ngMode)]="searchCity" placeholder="Search City" />
-  <button (click)="searchWeather()">Search</button>
-</div>
-<div *ngIf="weatherData">
-  <button (click)="toggleFavorite()">Toggle Favorite</button>
+<div class="weather-container">
+  <div class="search-container">
+    <input
+      type="text"
+      [(ngModel)]="searchCity"
+      placeholder="Search City Weather"
+    />
+    <button (click)="searchWeather()">Search</button>
+  </div>
+  <div *ngIf="weatherData" class="weather-details">
+    <h2>
+      {{ weatherData?.Location.LocalizedName }},
+      {{ weatherData?.Location.Country.LocalizedName }}
+    </h2>
+    <p>Temperature: {{ weatherData?.Temperature.Metric.Value }}°C</p>
+    <p>Weather: {{ weatherData?.WeatherText }}</p>
+    <button (click)="toggleFavorite()">
+      {{
+        isFavorite
+          ? "Remove from Favorites Weather"
+          : "Add to Favorites Weather"
+      }}
+    </button>
+  </div>
 </div>
