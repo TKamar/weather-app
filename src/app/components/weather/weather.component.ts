@@ -15,6 +15,8 @@ export class WeatherComponent implements OnInit {
   searchCity: string = '';
   weatherData: any;
   isFavorite: boolean = false;
+  defaultLocationKey = 'Tel Aviv';
+
 
   constructor(
     private weatherService: WeatherService,
@@ -26,8 +28,8 @@ export class WeatherComponent implements OnInit {
   ngOnInit(): void {
     this.setDefaultLocation();
     this.route.queryParams.subscribe((params) => {
-      if (params.id && params.name) {
-        this.loadFavoriteDetails(params.id, params.name);
+      if (params['id'] && params['name']) {
+        this.loadFavoriteDetails(params['id'], params['name']);
       }
     });
   }
@@ -67,19 +69,18 @@ export class WeatherComponent implements OnInit {
 
 
   private setDefaultLocation() {
-    const defaultLocationKey = 'YOUR_DEFAULT_LOCATION_KEY';
 
-    const isFavorite = this.favoritesService.getFavorites().some((fav) => fav.id === defaultLocationKey);
+    const isFavorite = this.favoritesService.getFavorites().some((fav) => fav.id === this.defaultLocationKey);
 
     if (isFavorite) {
-      const defaultFavorite = this.favoritesService.getFavorites().find((fav) => fav.id === defaultLocationKey);
+      const defaultFavorite = this.favoritesService.getFavorites().find((fav) => fav.id === this.defaultLocationKey);
       if (defaultFavorite) {
         this.searchCity = defaultFavorite.name;
         this.searchWeather();
         this.isFavorite = true;
       }
     } else {
-      this.weatherService.getLocation('DefaultCity').subscribe((locations: any) => {
+      this.weatherService.getLocation(this.defaultLocationKey).subscribe((locations: any) => {
         if (locations && locations.length > 0) {
           const locationKey = locations[0].Key;
           this.weatherService.getCurrentWeather(locationKey).subscribe((currentWeather: any) => {
@@ -89,6 +90,7 @@ export class WeatherComponent implements OnInit {
       });
     }
   }
+
 
 }
 /*
