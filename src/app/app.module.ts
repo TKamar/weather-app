@@ -7,6 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
 import { WeatherComponent } from './components/weather/weather.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
+import { FavoritesService } from './services/favorites.service';
+import { WEATHER_SERVICE_TOKEN, WeatherService } from './services/weather.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,9 +22,13 @@ import { FavoritesComponent } from './components/favorites/favorites.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [FavoritesService,
+    {
+      provide: WEATHER_SERVICE_TOKEN, useClass: WeatherService,
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
