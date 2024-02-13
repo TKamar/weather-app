@@ -16,6 +16,9 @@ export class WeatherComponent implements OnInit {
   weatherData: any;
   isFavorite: boolean = false;
   defaultLocationKey = 'New York';
+  temperature = '';
+  weather = '';
+  cityName = '';
 
 
   constructor(
@@ -37,16 +40,20 @@ export class WeatherComponent implements OnInit {
 
   private loadFavoriteDetails(id: number, name: string) {
     this.searchCity = name;
-    this.searchWeather();
+    this.searchWeather(this.searchCity);
     this.isFavorite = true;
   }
 
-  searchWeather() {
-    this.weatherService.getLocation(this.searchCity).subscribe((locations: any) => {
-      if (locations && locations.lenght > 0) {
+  searchWeather(city: string) {
+    this.weatherService.getLocation(city).subscribe((locations: any) => {
+      if (locations && locations.length > 0) {
+        console.log('locations: ', locations);
         const locationKey = locations[0].key;
+        this.cityName = locations[0].LocalizedName;
         this.weatherService.getCurrentWeather(locationKey).subscribe((currentWeather: any) => {
           this.weatherData = currentWeather;
+          this.temperature = this.weatherData.Temperature.Metric.Value;
+          this.weather = this.weatherData.WeatherText
         });
       }
     });
@@ -54,11 +61,11 @@ export class WeatherComponent implements OnInit {
 
   toggleFavorite() {
     if (this.isFavorite) {
-      this.favoritesService.removeFavorite(this.weatherData.Location.Key);
+      this.favoritesService.removeFavorite(this.weatherData.Key);
     } else {
       const newFavorite = {
-        id: this.weatherData.Location.Key,
-        name: this.weatherData.Location.LocalizedName,
+        id: this.weatherData.Key,
+        name: this.cityName,
         currentWeather: this.weatherData.WeaterText,
       };
       this.favoritesService.addFavorite(newFavorite);
@@ -77,15 +84,15 @@ export class WeatherComponent implements OnInit {
       const defaultFavorite = this.favoritesService.getFavorites().find((fav) => fav.id === this.defaultLocationKey);
       if (defaultFavorite) {
         this.searchCity = defaultFavorite.name;
-        this.searchWeather();
+        this.searchWeather(this.searchCity);
         this.isFavorite = true;
       }
     } else {
       this.weatherService.getLocation(this.defaultLocationKey).subscribe((locations: any) => {
         if (locations && locations.length > 0) {
           const locationKey = locations[0].Key;
-          console.log('locationKey:', locationKey);
-
+          console.log('locations:', locations);
+          this.cityName = locations[0].LocalizedName;
           this.weatherService.getCurrentWeather(locationKey).subscribe((currentWeather: any) => {
             this.weatherData = currentWeather[0];
             console.log('this.weatherData:', this.weatherData);

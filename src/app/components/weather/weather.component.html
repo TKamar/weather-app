@@ -5,11 +5,11 @@
       [(ngModel)]="searchCity"
       placeholder="Search City Weather"
     />
-    <button (click)="searchWeather()">Search</button>
+    <button (click)="searchWeather(searchCity)">Search</button>
   </div>
   <div *ngIf="weatherData" class="weather-details">
     <h2>
-      {{ weatherData?.LocalizedName }}
+      {{ cityName }}
     </h2>
     <p>Temperature: {{ weatherData?.Temperature.Metric.Value }}°C</p>
     <p>Weather: {{ weatherData?.WeatherText }}</p>
