@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { WeatherService } from 'src/app/services/weather.service';
-import { FormsModule } from "@angular/forms"
+import { Component, OnInit, Inject } from '@angular/core';
+import { WEATHER_SERVICE_TOKEN, WeatherService } from 'src/app/services/weather.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FavoritesService } from 'src/app/services/favorites.service';
+import { log } from 'console';
 
 
 @Component({
@@ -15,10 +15,11 @@ export class WeatherComponent implements OnInit {
   searchCity: string = '';
   weatherData: any;
   isFavorite: boolean = false;
-  defaultLocationKey = 'Tel Aviv';
+  defaultLocationKey = 'New York';
 
 
   constructor(
+    @Inject(WEATHER_SERVICE_TOKEN)
     private weatherService: WeatherService,
     private route: ActivatedRoute,
     private router: Router,
@@ -83,8 +84,14 @@ export class WeatherComponent implements OnInit {
       this.weatherService.getLocation(this.defaultLocationKey).subscribe((locations: any) => {
         if (locations && locations.length > 0) {
           const locationKey = locations[0].Key;
+          console.log('locationKey:', locationKey);
+
           this.weatherService.getCurrentWeather(locationKey).subscribe((currentWeather: any) => {
             this.weatherData = currentWeather[0];
+            console.log('this.weatherData:', this.weatherData);
+            console.log('currentWeather:', currentWeather);
+
+
           });
         }
       });

@@ -9,8 +9,7 @@
   </div>
   <div *ngIf="weatherData" class="weather-details">
     <h2>
-      {{ weatherData?.Location.LocalizedName }},
-      {{ weatherData?.Location.Country.LocalizedName }}
+      {{ weatherData?.LocalizedName }}
     </h2>
     <p>Temperature: {{ weatherData?.Temperature.Metric.Value }}°C</p>
     <p>Weather: {{ weatherData?.WeatherText }}</p>
